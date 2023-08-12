@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 import com.shahzaman.habitslog.habitFeature.presentation.screens.HomeScreen
 import com.shahzaman.habitslog.habitFeature.presentation.screens.SettingScreen
 import com.shahzaman.habitslog.habitFeature.presentation.screens.StatScreen
@@ -12,12 +13,16 @@ import com.shahzaman.habitslog.habitFeature.presentation.screens.StatScreen
 @Composable
 fun SetupNavGraph(
     navHostController: NavHostController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    state: HabitState
 ) {
     NavHost(navController = navHostController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route)
         {
-            HomeScreen(paddingValues = paddingValues)
+            HomeScreen(
+                paddingValues = paddingValues,
+                state = state
+            )
         }
 
         composable(

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @Composable
 fun ProgressCard(
@@ -38,7 +39,9 @@ fun ProgressCard(
             ) {
                 Text(
                     text = "You are almost there!",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = Patua_One
+                    )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(

@@ -13,14 +13,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import com.shahzaman.habitslog.habitFeature.presentation.HabitState
+import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitCard(
     habitName: String,
-    habitFrequency: String
+    habitFrequency: String,
+    state: HabitState
 ) {
     Card(
         modifier = Modifier
@@ -44,28 +46,30 @@ fun HabitCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = 16.dp,
-                        vertical = 6.dp
+                        start = 16.dp,
+                        end = 24.dp,
+                        top = 8.dp,
+                        bottom = 8.dp
                     ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = habitName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontFamily = Patua_One
+                    ),
                 )
 
                 Text(
                     text = habitFrequency,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontFamily = FontFamily.Default
-                    ),
-                    modifier = Modifier,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
                 )
             }
-            WeekDayChip()
+            WeekDayChip(
+                state = state
+            )
         }
     }
 }

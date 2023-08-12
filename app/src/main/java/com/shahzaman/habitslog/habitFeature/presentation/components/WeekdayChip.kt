@@ -23,10 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shahzaman.habitslog.R
+import com.shahzaman.habitslog.habitFeature.data.database.CheckedItem
+import com.shahzaman.habitslog.habitFeature.presentation.HabitState
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeekDayChip() {
+fun WeekDayChip(
+    state: HabitState
+) {
     var mediaPlayer: MediaPlayer
     val weekDays = arrayOf("M", "T", "W", "T", "F", "S", "S")
     val selectedState =
@@ -55,6 +60,12 @@ fun WeekDayChip() {
                         indication = null
                     ) {
                         selectedState[index] = !selectedState[index]
+                        state.isChecked = CheckedItem(
+                            isChecked,
+                            LocalDate
+                                .now()
+                                .toString()
+                        )
                         mediaPlayer = MediaPlayer.create(context, R.raw.done)
                         mediaPlayer.setOnPreparedListener {
                             mediaPlayer.start()
