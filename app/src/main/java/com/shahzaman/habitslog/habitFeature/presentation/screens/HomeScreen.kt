@@ -9,6 +9,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 import com.shahzaman.habitslog.habitFeature.presentation.components.HabitCard
 import com.shahzaman.habitslog.habitFeature.presentation.components.ProgressCard
@@ -16,7 +17,8 @@ import com.shahzaman.habitslog.habitFeature.presentation.components.ProgressCard
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
-    state: HabitState
+    state: HabitState,
+    onEvent: (HabitEvent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -33,7 +35,10 @@ fun HomeScreen(
             items(state.habits) { habit ->
                 HabitCard(
                     habitName = habit.title, habitFrequency = "Daily",
-                    state = state
+                    onEvent = onEvent,
+                    onclick = {
+                        onEvent(HabitEvent.CheckHabit(habit.id))
+                    }
                 )
             }
         }

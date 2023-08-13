@@ -10,6 +10,7 @@ import com.shahzaman.habitslog.habitFeature.domain.habit.SortType
 import com.shahzaman.habitslog.habitFeature.domain.mapper.Habit
 import com.shahzaman.habitslog.habitFeature.domain.mapper.HabitMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -55,38 +56,21 @@ class HabitViewModel @Inject constructor(
 
     fun onEvent(event: HabitEvent) {
         when (event) {
-            HabitEvent.CheckHabit -> {
-                val selectedDays = selectedWeekDays.mapIndexedNotNull { index, isChecked ->
-                    if (isChecked) index else null
-                }
+            is HabitEvent.CheckHabit -> {
                 val currentDate = LocalDate.now().toString()
 
-                // Create a CheckedItem based on the selected weekdays and date
                 val checkedItem = CheckedItem(
                     state = true,
                     date = currentDate
                 )
 
-                val habit = Habit(
-                    title = state.value.title,
-                    description = state.value.title,
-                    isChecked = checkedItem,
-                    time = state.value.time,
-                    date = state.value.date
-                )
 
-                viewModelScope.launch {
-                    dao.upsertHabit(HabitMapper.toEntity(habit))
+                viewModelScope.launch(Dispatchers.IO) {
+                    val habit = dao.getHabitById(event.id)
+                    val updatedHabit = habit.copy(isChecked = checkedItem)
+                    dao.upsertHabit(updatedHabit)
                 }
-                _state.update {
-                    it.copy(
-                        isAddingHabit = false,
-                        title = "",
-                        time = "",
-                        // Clear selected weekdays after checking habit
-                        isChecked = checkedItem // Assign the CheckedItem
-                    )
-                }
+
             }
 
             is HabitEvent.DeleteHabit -> {
@@ -161,4 +145,14 @@ class HabitViewModel @Inject constructor(
             }
         }
     }
+
+    private fun toggleSelectedWeekDays() {
+        val updatedSelectedWeekDays = selectedWeekDays.mapIndexed { index, isChecked ->
+            isChecked xor true // Toggle the selection status for each weekday
+        }
+
+        _selectedWeekDays.clear()
+        _selectedWeekDays.addAll(updatedSelectedWeekDays)
+    }
+
 }

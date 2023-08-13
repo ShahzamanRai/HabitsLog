@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.shahzaman.habitslog.habitFeature.presentation.HabitState
+import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,7 +22,8 @@ import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 fun HabitCard(
     habitName: String,
     habitFrequency: String,
-    state: HabitState
+    onclick: () -> Unit,
+    onEvent: (HabitEvent) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -36,6 +37,7 @@ fun HabitCard(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
+        onClick = onclick,
         shape = MaterialTheme.shapes.large
     ) {
         Column(
@@ -68,7 +70,7 @@ fun HabitCard(
                 )
             }
             WeekDayChip(
-                state = state
+                onEvent = onEvent
             )
         }
     }

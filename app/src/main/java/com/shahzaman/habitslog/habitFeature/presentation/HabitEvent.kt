@@ -9,7 +9,7 @@ sealed interface HabitEvent {
     data class SetTime(val time: String) : HabitEvent
     object ShowDialog : HabitEvent
     object HideDialog : HabitEvent
-    object CheckHabit : HabitEvent
+    data class CheckHabit(val id: Int) : HabitEvent
     data class SortHabit(val sortType: SortType) : HabitEvent
     data class DeleteHabit(val habit: HabitEntity) : HabitEvent
 }

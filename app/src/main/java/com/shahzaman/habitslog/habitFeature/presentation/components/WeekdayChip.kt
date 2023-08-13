@@ -4,12 +4,13 @@ import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,14 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shahzaman.habitslog.R
-import com.shahzaman.habitslog.habitFeature.data.database.CheckedItem
-import com.shahzaman.habitslog.habitFeature.presentation.HabitState
-import java.time.LocalDate
+import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeekDayChip(
-    state: HabitState
+    onEvent: (HabitEvent) -> Unit,
 ) {
     var mediaPlayer: MediaPlayer
     val weekDays = arrayOf("M", "T", "W", "T", "F", "S", "S")
@@ -60,12 +58,6 @@ fun WeekDayChip(
                         indication = null
                     ) {
                         selectedState[index] = !selectedState[index]
-                        state.isChecked = CheckedItem(
-                            isChecked,
-                            LocalDate
-                                .now()
-                                .toString()
-                        )
                         mediaPlayer = MediaPlayer.create(context, R.raw.done)
                         mediaPlayer.setOnPreparedListener {
                             mediaPlayer.start()

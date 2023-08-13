@@ -77,7 +77,8 @@ class MainActivity : ComponentActivity() {
                 ) { paddingValues ->
                     SetupNavGraph(
                         navHostController = navController, paddingValues = paddingValues,
-                        state = state
+                        state = state,
+                        onEvent = viewModel::onEvent
                     )
                     if (state.isAddingHabit) {
                         AddHabitSheet(state = state, onEvent = viewModel::onEvent)

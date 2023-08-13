@@ -14,6 +14,9 @@ interface HabitDao {
     @Query("SELECT * FROM habitentity ORDER BY title ASC")
     fun getHabitsByTitle(): Flow<List<HabitEntity>>
 
+    @Query("SELECT * FROM habitentity WHERE id = :id")
+    fun getHabitById(id: Int): HabitEntity
+
     @Upsert
     suspend fun upsertHabit(habit: HabitEntity)
 
