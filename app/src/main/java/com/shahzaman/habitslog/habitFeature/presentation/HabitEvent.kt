@@ -10,6 +10,7 @@ sealed interface HabitEvent {
     object ShowDialog : HabitEvent
     object HideDialog : HabitEvent
     data class CheckHabit(val id: Int) : HabitEvent
+    data class UnCheckHabit(val id: Int) : HabitEvent
     data class SortHabit(val sortType: SortType) : HabitEvent
     data class DeleteHabit(val habit: HabitEntity) : HabitEvent
 }

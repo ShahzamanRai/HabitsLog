@@ -1,8 +1,9 @@
 package com.shahzaman.habitslog.habitFeature.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -11,10 +12,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
+import com.shahzaman.habitslog.R
+import com.shahzaman.habitslog.habitFeature.data.database.HabitEntity
 import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,14 +29,17 @@ import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 fun HabitCard(
     habitName: String,
     habitFrequency: String,
-    onclick: () -> Unit,
-    onEvent: (HabitEvent) -> Unit
+    onCheck: () -> Unit,
+    onUnCheck: () -> Unit,
+    habitEntity: HabitEntity,
+    context: Context
 ) {
+    var checkedState by remember { mutableStateOf(habitEntity.isChecked.state) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 24.dp,
+                top = 16.dp,
                 start = 16.dp,
                 end = 16.dp
             ),
@@ -37,24 +47,38 @@ fun HabitCard(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
-        onClick = onclick,
+        onClick = {
+            checkedState = !checkedState
+            if (checkedState) playSound(context)
+        },
         shape = MaterialTheme.shapes.large
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+
+        LaunchedEffect(checkedState) {
+            if (checkedState) {
+                onCheck()
+            } else {
+                onUnCheck()
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    end = 24.dp,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
+            CustomCheckbox(
+                checked = checkedState,
+                onCheckedChange = {
+                    checkedState = it
+                    if (checkedState) playSound(context)
+                }
+            )
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        end = 24.dp,
-                        top = 8.dp,
-                        bottom = 8.dp
-                    ),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = habitName,
@@ -62,16 +86,25 @@ fun HabitCard(
                         fontFamily = Patua_One
                     ),
                 )
-
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = habitFrequency,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
                 )
             }
-            WeekDayChip(
-                onEvent = onEvent
-            )
         }
+    }
+}
+
+fun playSound(
+    context: Context
+) {
+    val mediaPlayer = MediaPlayer.create(context, R.raw.done)
+    mediaPlayer.setOnPreparedListener {
+        mediaPlayer.start()
+    }
+    mediaPlayer.setOnCompletionListener {
+        mediaPlayer.release()
     }
 }

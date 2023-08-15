@@ -1,7 +1,6 @@
 package com.shahzaman.habitslog.habitFeature.presentation
 
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahzaman.habitslog.habitFeature.data.database.CheckedItem
@@ -23,7 +22,7 @@ class HabitViewModel @Inject constructor(
     private val dao: HabitDao
 ) : ViewModel() {
 
-    private val _sortType = MutableStateFlow(SortType.TIME)
+    private val _sortType = MutableStateFlow(SortType.TITLE)
     private val _habits = _sortType
         .flatMapLatest { sortType ->
             when (sortType) {
@@ -44,16 +43,6 @@ class HabitViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HabitState())
 
-    private val _selectedWeekDays = mutableStateListOf<Boolean>().apply {
-        repeat(7) { add(false) }
-    }
-    val selectedWeekDays: List<Boolean> get() = _selectedWeekDays
-
-    fun toggleWeekDay(dayIndex: Int) {
-        _selectedWeekDays[dayIndex] = !_selectedWeekDays[dayIndex]
-    }
-
-
     fun onEvent(event: HabitEvent) {
         when (event) {
             is HabitEvent.CheckHabit -> {
@@ -61,6 +50,23 @@ class HabitViewModel @Inject constructor(
 
                 val checkedItem = CheckedItem(
                     state = true,
+                    date = currentDate
+                )
+
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    val habit = dao.getHabitById(event.id)
+                    val updatedHabit = habit.copy(isChecked = checkedItem)
+                    dao.upsertHabit(updatedHabit)
+                }
+
+            }
+
+            is HabitEvent.UnCheckHabit -> {
+                val currentDate = LocalDate.now().toString()
+
+                val checkedItem = CheckedItem(
+                    state = false,
                     date = currentDate
                 )
 
@@ -145,14 +151,4 @@ class HabitViewModel @Inject constructor(
             }
         }
     }
-
-    private fun toggleSelectedWeekDays() {
-        val updatedSelectedWeekDays = selectedWeekDays.mapIndexed { index, isChecked ->
-            isChecked xor true // Toggle the selection status for each weekday
-        }
-
-        _selectedWeekDays.clear()
-        _selectedWeekDays.addAll(updatedSelectedWeekDays)
-    }
-
 }

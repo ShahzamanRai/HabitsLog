@@ -1,5 +1,6 @@
 package com.shahzaman.habitslog.habitFeature.presentation.navigation
 
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -16,7 +17,8 @@ fun SetupNavGraph(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     state: HabitState,
-    onEvent: (HabitEvent) -> Unit
+    onEvent: (HabitEvent) -> Unit,
+    context: Context
 ) {
     NavHost(navController = navHostController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route)
@@ -24,7 +26,8 @@ fun SetupNavGraph(
             HomeScreen(
                 paddingValues = paddingValues,
                 state = state,
-                onEvent = onEvent
+                onEvent = onEvent,
+                context = context
             )
         }
 

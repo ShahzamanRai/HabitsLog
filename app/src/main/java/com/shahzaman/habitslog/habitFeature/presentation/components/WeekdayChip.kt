@@ -24,11 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shahzaman.habitslog.R
-import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 
 @Composable
 fun WeekDayChip(
-    onEvent: (HabitEvent) -> Unit,
+    onclick: () -> Unit,
 ) {
     var mediaPlayer: MediaPlayer
     val weekDays = arrayOf("M", "T", "W", "T", "F", "S", "S")
@@ -58,6 +57,7 @@ fun WeekDayChip(
                         indication = null
                     ) {
                         selectedState[index] = !selectedState[index]
+                        run { onclick }
                         mediaPlayer = MediaPlayer.create(context, R.raw.done)
                         mediaPlayer.setOnPreparedListener {
                             mediaPlayer.start()

@@ -56,12 +56,10 @@ class MainActivity : ComponentActivity() {
                         navController.popBackStack()
                     }
                 }
-
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         Header(
-                            state = state,
                             onEvent = viewModel::onEvent
                         )
                     },
@@ -78,7 +76,8 @@ class MainActivity : ComponentActivity() {
                     SetupNavGraph(
                         navHostController = navController, paddingValues = paddingValues,
                         state = state,
-                        onEvent = viewModel::onEvent
+                        onEvent = viewModel::onEvent,
+                        context = baseContext
                     )
                     if (state.isAddingHabit) {
                         AddHabitSheet(state = state, onEvent = viewModel::onEvent)

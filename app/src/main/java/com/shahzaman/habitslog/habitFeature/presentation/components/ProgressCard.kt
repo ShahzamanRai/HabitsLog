@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +18,10 @@ import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @Composable
 fun ProgressCard(
-    modifier: Modifier
+    modifier: Modifier,
+    totalHabits: Int,
+    checkedHabits: Int,
+    progress: Float
 ) {
     Card(
         modifier = modifier
@@ -45,12 +47,12 @@ fun ProgressCard(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "1/3 day goals completed",
+                    text = "${checkedHabits}/${totalHabits} day goals completed",
                     style = MaterialTheme.typography.labelLarge
                 )
             }
             CircularProgressbar(
-                progress = 25f
+                progress = progress
             )
         }
     }
