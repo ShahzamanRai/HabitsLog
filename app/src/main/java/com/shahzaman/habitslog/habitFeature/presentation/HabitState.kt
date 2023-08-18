@@ -12,7 +12,7 @@ data class HabitState(
     val title: String = "",
     var isChecked: CheckedItem = CheckedItem(
         false,
-        LocalDate.now().toString()
+        listOf(LocalDate.now())
     ),
     val isAddingHabit: Boolean = false,
     val sortType: SortType = SortType.TIME,

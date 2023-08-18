@@ -2,19 +2,20 @@ package com.shahzaman.habitslog.habitFeature.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HabitDao {
-    @Query("SELECT * FROM habitentity ORDER BY time ASC")
+    @Query("SELECT * FROM habits ORDER BY time ASC")
     fun getHabitsByTime(): Flow<List<HabitEntity>>
 
-    @Query("SELECT * FROM habitentity ORDER BY title ASC")
+    @Query("SELECT * FROM habits ORDER BY title ASC")
     fun getHabitsByTitle(): Flow<List<HabitEntity>>
 
-    @Query("SELECT * FROM habitentity WHERE id = :id")
+    @Query("SELECT * FROM habits WHERE id = :id")
     fun getHabitById(id: Int): HabitEntity
 
     @Upsert

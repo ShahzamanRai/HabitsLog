@@ -10,8 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.shahzaman.habitslog.R
-import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
-import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 
 @Composable
 fun MyNavigationBar(
@@ -28,7 +26,7 @@ fun MyNavigationBar(
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
-                icon = { Icon(painterResource(item.icon), contentDescription = item.label) },
+                icon = { Icon(painterResource(item.selectedIcon), contentDescription = item.label) },
                 label = { Text(item.label) },
                 selected = selectedItem == index,
                 onClick = { onNavigationItemClicked(index) },
@@ -42,4 +40,7 @@ fun MyNavigationBar(
     }
 }
 
-data class NavigationBarItemData(val label: String, val icon: Int)
+data class NavigationBarItemData(
+    val label: String,
+    val selectedIcon: Int
+)

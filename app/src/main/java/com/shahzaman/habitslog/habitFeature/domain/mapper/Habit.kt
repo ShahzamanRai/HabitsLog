@@ -7,7 +7,7 @@ data class Habit(
     val id: Int = 0,
     val title: String,
     val description: String,
-    val isChecked: CheckedItem = CheckedItem(false, date = LocalDate.now().toString()),
+    val isChecked: CheckedItem = CheckedItem(false, date = listOf(LocalDate.now())),
     val time: String,
     val date: String,
 )

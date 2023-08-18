@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -27,7 +28,6 @@ import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.HabitsLogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 installSplashScreen()
                 navController = rememberNavController()
                 val state by viewModel.state.collectAsState()
-                var selectedItem by remember { mutableStateOf(0) }
+                var selectedItem by rememberSaveable { mutableStateOf(0) }
                 LaunchedEffect(selectedItem) {
                     val selectedScreen = when (selectedItem) {
                         0 -> Screen.Home.route

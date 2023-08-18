@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,11 +19,15 @@ import androidx.compose.ui.unit.dp
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitSheet(
     state: HabitState,
     onEvent: (HabitEvent) -> Unit
 ) {
+
+
+
     AlertDialog(
         onDismissRequest = { onEvent(HabitEvent.HideDialog) },
         confirmButton = {
@@ -69,4 +74,5 @@ fun AddHabitSheet(
             }
         }
     )
+
 }

@@ -21,7 +21,6 @@ import javax.inject.Inject
 class HabitViewModel @Inject constructor(
     private val dao: HabitDao
 ) : ViewModel() {
-
     private val _sortType = MutableStateFlow(SortType.TITLE)
     private val _habits = _sortType
         .flatMapLatest { sortType ->
@@ -46,11 +45,11 @@ class HabitViewModel @Inject constructor(
     fun onEvent(event: HabitEvent) {
         when (event) {
             is HabitEvent.CheckHabit -> {
-                val currentDate = LocalDate.now().toString()
+                val currentDate = LocalDate.now()
 
                 val checkedItem = CheckedItem(
                     state = true,
-                    date = currentDate
+                    date = listOf(currentDate)
                 )
 
 
@@ -63,11 +62,11 @@ class HabitViewModel @Inject constructor(
             }
 
             is HabitEvent.UnCheckHabit -> {
-                val currentDate = LocalDate.now().toString()
+                val currentDate = LocalDate.now()
 
                 val checkedItem = CheckedItem(
                     state = false,
-                    date = currentDate
+                    date = listOf(currentDate)
                 )
 
 
@@ -149,6 +148,9 @@ class HabitViewModel @Inject constructor(
             is HabitEvent.SortHabit -> {
                 _sortType.value = event.sortType
             }
+
+
+            else -> {}
         }
     }
 }

@@ -32,7 +32,7 @@ fun HabitCard(
     onCheck: () -> Unit,
     onUnCheck: () -> Unit,
     habitEntity: HabitEntity,
-    context: Context
+    context: Context,
 ) {
     var checkedState by remember { mutableStateOf(habitEntity.isChecked.state) }
     Card(
