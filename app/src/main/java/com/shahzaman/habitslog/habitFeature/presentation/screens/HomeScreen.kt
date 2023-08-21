@@ -2,7 +2,6 @@ package com.shahzaman.habitslog.habitFeature.presentation.screens
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,14 +23,12 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
-    paddingValues: PaddingValues,
     state: HabitState,
     onEvent: (HabitEvent) -> Unit,
     context: Context,
 ) {
     Column(
         modifier = Modifier
-            .padding(paddingValues)
     ) {
         var totalHabits by remember {
             mutableStateOf(0)

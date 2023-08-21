@@ -26,7 +26,4 @@ sealed class NavRoutes(
         stringRes = R.string.setting,
         icon = R.drawable.baseline_settings_24
     )
-
-    object AddHabit :
-        NavRoutes(route = "add_habit", , stringRes = R.string.addHabit, icon = R.drawable.ic_house)
 }

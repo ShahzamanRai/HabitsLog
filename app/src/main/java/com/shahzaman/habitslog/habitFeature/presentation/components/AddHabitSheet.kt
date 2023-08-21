@@ -46,7 +46,6 @@ fun AddHabitSheet(
                 .wrapContentHeight(),
             shape = MaterialTheme.shapes.large,
             tonalElevation = AlertDialogDefaults.TonalElevation
-
         ) {
             Column(
                 modifier = Modifier

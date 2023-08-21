@@ -1,10 +1,10 @@
 package com.shahzaman.habitslog.habitFeature.presentation.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,14 +19,12 @@ import com.shahzaman.habitslog.habitFeature.presentation.components.SettingsCate
 
 @Composable
 fun SettingScreen(
-    paddingValues: PaddingValues,
     settingsModel: SettingsViewModel
 ) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
-        color = MaterialTheme.colorScheme.background
+            .verticalScroll(rememberScrollState()),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             SettingsCategory(stringResource(R.string.appearance))

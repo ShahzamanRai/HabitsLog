@@ -3,25 +3,30 @@ package com.shahzaman.habitslog.habitFeature.presentation.navigation
 import android.content.Context
 import androidx.activity.addCallback
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.shahzaman.habitslog.R
+import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 import com.shahzaman.habitslog.habitFeature.presentation.HabitViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.MainActivity
 import com.shahzaman.habitslog.habitFeature.presentation.SettingsViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.components.ClickableIcon
+import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +35,8 @@ fun NavContainer(
     initialTab: NavRoutes,
     state: HabitState,
     viewModel: HabitViewModel,
-    baseContext: Context
+    baseContext: Context,
+    onEvent: (HabitEvent) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -40,7 +46,6 @@ fun NavContainer(
         NavRoutes.Stat,
         NavRoutes.Setting,
     )
-    val navRoutes = bottomNavItems + NavRoutes.AddHabit
 
     var selectedRoute by remember {
         mutableStateOf(initialTab)
@@ -48,15 +53,14 @@ fun NavContainer(
     LaunchedEffect(Unit) {
         val activity = context as MainActivity
         activity.onBackPressedDispatcher.addCallback {
-            if (selectedRoute != NavRoutes.AddHabit) activity.finish()
-            else navController.popBackStack()
+            navController.popBackStack()
         }
     }
 
     // listen for destination changes (e.g. back presses)
     DisposableEffect(Unit) {
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
-            navRoutes.firstOrNull { it.route == destination.route }
+            bottomNavItems.firstOrNull { it.route == destination.route }
                 ?.let { selectedRoute = it }
         }
         navController.addOnDestinationChangedListener(listener)
@@ -66,13 +70,13 @@ fun NavContainer(
         }
     }
 
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         rememberTopAppBarState()
     )
-
     Scaffold(
         modifier = when (selectedRoute) {
-            NavRoutes.AddHabit ->
+            NavRoutes.Setting ->
                 Modifier
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
 
@@ -81,7 +85,7 @@ fun NavContainer(
         topBar = {
             Crossfade(selectedRoute, label = "") { navRoute ->
                 when (navRoute) {
-                    NavRoutes.AddHabit -> LargeTopAppBar(
+                    NavRoutes.Setting -> LargeTopAppBar(
                         title = {
                             Text(stringResource(selectedRoute.stringRes))
                         },
@@ -93,13 +97,29 @@ fun NavContainer(
                         scrollBehavior = scrollBehavior
                     )
 
-                    else -> TopAppBar(
+                    else -> CenterAlignedTopAppBar(
                         title = {
-                            Text(stringResource(selectedRoute.stringRes))
+                            Text(
+                                text = stringResource(R.string.app_name),
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    fontFamily = Patua_One
+                                )
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { /* doSomething() */ }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Menu,
+                                    contentDescription = "Menu"
+                                )
+                            }
                         },
                         actions = {
-                            ClickableIcon(imageVector = Icons.Default.Add) {
-                                navController.navigate(NavRoutes.AddHabit.route)
+                            IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = "Add habit",
+                                )
                             }
                         }
                     )
@@ -117,7 +137,7 @@ fun NavContainer(
                         },
                         icon = {
                             Icon(
-                                imageVector = Icons.Default.Add, "Add habit"
+                                painter = painterResource(id = it.icon), "Add habit"
                             )
                         },
                         selected = it == selectedRoute,
@@ -130,11 +150,12 @@ fun NavContainer(
             }
         }
     ) { paddingValues ->
-        Box(
-            modifier = Modifier.padding(paddingValues)
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
         ) {
-            SetupNavGraph(
-                navHostController = navController, paddingValues = paddingValues,
+            SetupNavHost(
+                navHostController = navController,
                 state = state,
                 onEvent = viewModel::onEvent,
                 context = baseContext,
