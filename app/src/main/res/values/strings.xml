@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Habits Log</string>
+
+    //Navigation
+    <string name="home">Home</string>
+    <string name="stat">Stats</string>
+    <string name="setting">Setting</string>
+    <string name="addHabit">Add habit</string>
+
+
+    //Settings
+    <string name="appearance">Appearance</string>
+    <string name="theme">Theme</string>
+    <string name="system">System</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>

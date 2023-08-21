@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
+import com.shahzaman.habitslog.habitFeature.presentation.SettingsViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.components.AddHabitSheet
 import com.shahzaman.habitslog.habitFeature.presentation.screens.HomeScreen
 import com.shahzaman.habitslog.habitFeature.presentation.screens.SettingScreen
 import com.shahzaman.habitslog.habitFeature.presentation.screens.StatScreen
@@ -18,10 +20,11 @@ fun SetupNavGraph(
     paddingValues: PaddingValues,
     state: HabitState,
     onEvent: (HabitEvent) -> Unit,
-    context: Context
+    context: Context,
+    viewModel: SettingsViewModel
 ) {
-    NavHost(navController = navHostController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Home.route)
+    NavHost(navController = navHostController, startDestination = NavRoutes.Home.route) {
+        composable(route = NavRoutes.Home.route)
         {
             HomeScreen(
                 paddingValues = paddingValues,
@@ -32,15 +35,26 @@ fun SetupNavGraph(
         }
 
         composable(
-            route = Screen.Stat.route
+            route = NavRoutes.Stat.route
         ) {
             StatScreen(paddingValues = paddingValues)
         }
 
         composable(
-            route = Screen.Setting.route
+            route = NavRoutes.Setting.route
         ) {
-            SettingScreen(paddingValues = paddingValues)
+            SettingScreen(
+                paddingValues = paddingValues,
+                settingsModel = viewModel
+            )
+        }
+
+        composable(route = NavRoutes.AddHabit.route)
+        {
+            AddHabitSheet(
+                state = state,
+                onEvent = onEvent,
+            )
         }
     }
 }

@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter
 data class HabitState(
     val habits: List<Habit> = emptyList(),
     val title: String = "",
+    val frequency: String = "",
     var isChecked: CheckedItem = CheckedItem(
         false,
         listOf(LocalDate.now())

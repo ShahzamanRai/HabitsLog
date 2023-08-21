@@ -7,7 +7,7 @@ object HabitMapper {
         return Habit(
             id = entity.id,
             title = entity.title,
-            description = entity.description,
+            frequency = entity.frequency,
             isChecked = entity.isChecked,
             time = entity.time,
             date = entity.date
@@ -18,7 +18,7 @@ object HabitMapper {
         return HabitEntity(
             id = habit.id,
             title = habit.title,
-            description = habit.description,
+            frequency = habit.frequency,
             isChecked = habit.isChecked,
             time = habit.time,
             date = habit.date

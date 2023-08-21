@@ -94,6 +94,7 @@ class HabitViewModel @Inject constructor(
 
             HabitEvent.SaveHabit -> {
                 val title = state.value.title
+                val frequency = state.value.frequency
                 val isChecked = state.value.isChecked
                 val date = state.value.date
                 val time = state.value.time
@@ -104,7 +105,7 @@ class HabitViewModel @Inject constructor(
 
                 val habit = Habit(
                     title = title,
-                    description = title,
+                    frequency = frequency,
                     isChecked = isChecked,
                     date = date,
                     time = time
@@ -116,7 +117,8 @@ class HabitViewModel @Inject constructor(
                     it.copy(
                         isAddingHabit = false,
                         title = "",
-                        time = ""
+                        time = "",
+                        frequency = ""
                     )
                 }
             }
@@ -125,6 +127,14 @@ class HabitViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         title = event.title
+                    )
+                }
+            }
+
+            is HabitEvent.SetFrequency -> {
+                _state.update {
+                    it.copy(
+                        frequency = event.frequency
                     )
                 }
             }
@@ -149,8 +159,6 @@ class HabitViewModel @Inject constructor(
                 _sortType.value = event.sortType
             }
 
-
-            else -> {}
         }
     }
 }

@@ -65,7 +65,7 @@ fun HomeScreen(
             items(state.habits) { habit ->
                 HabitCard(
                     habitName = habit.title,
-                    habitFrequency = "Daily",
+                    habitFrequency = habit.frequency,
                     habitEntity = HabitMapper.toEntity(habit),
                     onCheck = {
                         onEvent(HabitEvent.CheckHabit(habit.id))

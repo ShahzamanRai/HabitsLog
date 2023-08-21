@@ -6,6 +6,7 @@ import com.shahzaman.habitslog.habitFeature.domain.habit.SortType
 sealed interface HabitEvent {
     object SaveHabit : HabitEvent
     data class SetTitle(val title: String) : HabitEvent
+    data class SetFrequency(val frequency: String) : HabitEvent
     data class SetTime(val time: String) : HabitEvent
     object ShowDialog : HabitEvent
     object HideDialog : HabitEvent
