@@ -1,6 +1,7 @@
 package com.shahzaman.habitslog.habitFeature.data.database
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
@@ -16,7 +17,7 @@ data class HabitEntity(
 )
 
 data class CheckedItem(
-    @ColumnInfo(name = "state") val state: Boolean,
+    @Embedded @ColumnInfo(name = "state") val state: Boolean,
     @ColumnInfo(name = "date") val date: List<LocalDate>
 )
 

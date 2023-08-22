@@ -7,46 +7,33 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.shahzaman.habitslog.habitFeature.domain.mapper.HabitMapper
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
+import com.shahzaman.habitslog.habitFeature.presentation.HabitViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.components.HabitCard
 import com.shahzaman.habitslog.habitFeature.presentation.components.ProgressCard
-import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
     state: HabitState,
     onEvent: (HabitEvent) -> Unit,
     context: Context,
+    navController: NavController,
+    viewModel: HabitViewModel
 ) {
     Column(
         modifier = Modifier
     ) {
-        var totalHabits by remember {
-            mutableStateOf(0)
-        }
-        LaunchedEffect(Unit) {
-            delay(100)
-            totalHabits = state.habits.size
-        }
-        val checkedHabits = 6
-        val progress by remember {
-            mutableStateOf(
-                if (totalHabits != 0) {
-                    ((checkedHabits.toFloat() / totalHabits.toFloat()) * 100F)
-                } else {
-                    0f
-                }
-            )
-        }
+
+        val totalHabits by viewModel.totalHabitsFlow.collectAsState(initial = 0)
+        val checkedHabits by viewModel.checkedHabitsFlow.collectAsState(initial = 0)
+
         ProgressCard(
             modifier = Modifier.padding(
                 horizontal = 16.dp,
@@ -54,7 +41,6 @@ fun HomeScreen(
             ),
             totalHabits = totalHabits,
             checkedHabits = checkedHabits,
-            progress = progress
         )
         Divider()
         LazyColumn(
@@ -70,7 +56,8 @@ fun HomeScreen(
                     onUnCheck = {
                         onEvent(HabitEvent.UnCheckHabit(habit.id))
                     },
-                    context = context
+                    context = context,
+                    navController = navController
                 )
             }
         }

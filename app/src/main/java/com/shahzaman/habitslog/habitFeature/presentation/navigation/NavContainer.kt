@@ -8,18 +8,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.shahzaman.habitslog.R
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 import com.shahzaman.habitslog.habitFeature.presentation.HabitViewModel
@@ -31,7 +28,7 @@ import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavContainer(
-    settingsModel: SettingsViewModel,
+    settingsViewModel: SettingsViewModel,
     initialTab: NavRoutes,
     state: HabitState,
     viewModel: HabitViewModel,
@@ -85,7 +82,7 @@ fun NavContainer(
         topBar = {
             Crossfade(selectedRoute, label = "") { navRoute ->
                 when (navRoute) {
-                    NavRoutes.Setting -> LargeTopAppBar(
+                    NavRoutes.Setting -> MediumTopAppBar(
                         title = {
                             Text(stringResource(selectedRoute.stringRes))
                         },
@@ -97,53 +94,37 @@ fun NavContainer(
                         scrollBehavior = scrollBehavior
                     )
 
-                    else -> CenterAlignedTopAppBar(
+                    else -> TopAppBar(
                         title = {
                             Text(
-                                text = stringResource(R.string.app_name),
+                                text = stringResource(id = selectedRoute.stringRes),
                                 style = MaterialTheme.typography.titleLarge.copy(
                                     fontFamily = Patua_One
                                 )
                             )
                         },
-                        navigationIcon = {
-                            IconButton(onClick = { /* doSomething() */ }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Menu,
-                                    contentDescription = "Menu"
-                                )
-                            }
-                        },
                         actions = {
-                            IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "Add habit",
-                                )
+                            if (navRoute == NavRoutes.Home) {
+                                IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = "Add habit",
+                                    )
+                                }
+                                IconButton(onClick = { navController.navigate(NavRoutes.Setting.route) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Settings,
+                                        contentDescription = "Settings",
+                                    )
+                                }
                             }
-                        }
-                    )
-                }
-            }
-        },
-        bottomBar = {
-            NavigationBar(
-                tonalElevation = 5.dp
-            ) {
-                bottomNavItems.forEach {
-                    NavigationBarItem(
-                        label = {
-                            Text(stringResource(it.stringRes))
                         },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = it.icon), "Add habit"
-                            )
-                        },
-                        selected = it == selectedRoute,
-                        onClick = {
-                            selectedRoute = it
-                            navController.navigate(it.route)
+                        navigationIcon = {
+                            if (navRoute == NavRoutes.Stat) {
+                                ClickableIcon(imageVector = Icons.Default.ArrowBack) {
+                                    navController.popBackStack()
+                                }
+                            }
                         }
                     )
                 }
@@ -159,7 +140,8 @@ fun NavContainer(
                 state = state,
                 onEvent = viewModel::onEvent,
                 context = baseContext,
-                viewModel = settingsModel
+                settingsViewModel = settingsViewModel,
+                habitsViewModel = viewModel
             )
         }
     }

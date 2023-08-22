@@ -20,8 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.shahzaman.habitslog.R
 import com.shahzaman.habitslog.habitFeature.data.database.HabitEntity
+import com.shahzaman.habitslog.habitFeature.presentation.navigation.NavRoutes
 import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +35,7 @@ fun HabitCard(
     onUnCheck: () -> Unit,
     habitEntity: HabitEntity,
     context: Context,
+    navController: NavController
 ) {
     var checkedState by remember { mutableStateOf(habitEntity.isChecked.state) }
     Card(
@@ -48,8 +51,7 @@ fun HabitCard(
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         onClick = {
-            checkedState = !checkedState
-            if (checkedState) playSound(context)
+            navController.navigate(NavRoutes.Stat.route)
         },
         shape = MaterialTheme.shapes.large
     ) {

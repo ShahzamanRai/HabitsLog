@@ -42,6 +42,10 @@ class HabitViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HabitState())
 
+
+    val totalHabitsFlow: Flow<Int> = dao.getTotalHabits()
+    val checkedHabitsFlow: Flow<Int> = getCheckedHabitsCount()
+
     fun onEvent(event: HabitEvent) {
         when (event) {
             is HabitEvent.CheckHabit -> {
@@ -160,5 +164,11 @@ class HabitViewModel @Inject constructor(
             }
 
         }
+    }
+    private fun getCheckedHabitsCount(): Flow<Int> {
+        return dao.getHabitsByTitle() // Use the appropriate query here
+            .map { habits ->
+                habits.count { it.isChecked.state }
+            }
     }
 }

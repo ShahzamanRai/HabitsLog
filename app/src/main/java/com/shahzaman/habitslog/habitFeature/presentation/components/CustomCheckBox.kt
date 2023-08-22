@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 @Composable
 fun CustomCheckbox(
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
 ) {
     IconButton(
-        onClick = { /*TODO*/ },
+        onClick = { onCheckedChange(!checked) },
     ) {
         Icon(
             imageVector = if (checked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
@@ -24,7 +24,7 @@ fun CustomCheckbox(
             modifier = Modifier.clickable(
                 interactionSource = MutableInteractionSource(), // Set interactionSource to null
                 indication = null
-            ) {
+            ){
                 onCheckedChange(!checked)
             }
         )

@@ -1,7 +1,10 @@
 package com.shahzaman.habitslog.habitFeature.data.converter
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.shahzaman.habitslog.habitFeature.data.database.CheckedItem
+import java.lang.reflect.Type
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

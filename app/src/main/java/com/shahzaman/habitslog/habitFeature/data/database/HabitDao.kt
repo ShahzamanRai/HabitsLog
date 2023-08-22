@@ -2,7 +2,6 @@ package com.shahzaman.habitslog.habitFeature.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -24,4 +23,7 @@ interface HabitDao {
     @Delete
     suspend fun deleteHabit(habit: HabitEntity)
 
+    @Query("SELECT COUNT(*) FROM habits")
+    fun getTotalHabits(): Flow<Int>
+    
 }

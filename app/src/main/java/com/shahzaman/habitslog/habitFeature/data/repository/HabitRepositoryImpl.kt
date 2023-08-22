@@ -28,4 +28,12 @@ class HabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : 
     override suspend fun getHabitById(id: Int): HabitEntity {
         return habitDao.getHabitById(id = id)
     }
+
+    override suspend fun getTotalHabits(): Flow<Int> {
+        return habitDao.getTotalHabits()
+    }
+
+    override suspend fun checkedHabits(): Flow<Int> {
+        return checkedHabits()
+    }
 }

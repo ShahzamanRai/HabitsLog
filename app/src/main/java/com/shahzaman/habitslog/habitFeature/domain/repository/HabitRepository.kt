@@ -9,5 +9,7 @@ interface HabitRepository {
     suspend fun getHabitsByTime(): Flow<List<HabitEntity>>
     suspend fun getHabitsByTitle(): Flow<List<HabitEntity>>
     suspend fun getHabitById(id: Int): HabitEntity
+    suspend fun getTotalHabits(): Flow<Int>
+    suspend fun checkedHabits(): Flow<Int>
 }
 

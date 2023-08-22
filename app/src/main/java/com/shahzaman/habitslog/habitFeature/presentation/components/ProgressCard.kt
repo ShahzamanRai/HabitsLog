@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,8 +22,16 @@ fun ProgressCard(
     modifier: Modifier,
     totalHabits: Int,
     checkedHabits: Int,
-    progress: Float
 ) {
+    val progress: Float = remember(checkedHabits, totalHabits) {
+        val calculatedProgress = (checkedHabits.toFloat() / totalHabits.toFloat()) * 100f
+        if (calculatedProgress.isNaN()) {
+            0f
+        } else {
+            calculatedProgress
+        }
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth(),

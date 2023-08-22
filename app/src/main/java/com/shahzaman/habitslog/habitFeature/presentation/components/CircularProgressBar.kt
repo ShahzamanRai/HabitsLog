@@ -1,5 +1,7 @@
 package com.shahzaman.habitslog.habitFeature.presentation.components
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -33,6 +35,7 @@ fun CircularProgressbar(
     extraSizeForegroundIndicator: Dp = 6.dp
 ) {
 
+    Log.d(TAG, "CircularProgressbar: $progress")
     // It remembers the number value
     var numberR by remember {
         mutableStateOf(-1f)
