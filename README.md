@@ -31,8 +31,8 @@ HabitLog not only helps you build habits but also enhances your skills:
 * Manage data effectively with Room Database.
 
 ## Sneak Peek
-![Home Screen - Light Theme](https://github.com/YourUsername/HabitLog/blob/master/screenshots/HomeScreenLight.png)
-![Home Screen - Dark Theme](https://github.com/YourUsername/HabitLog/blob/master/screenshots/HomeScreenDark.png)
+![Home Screen - Light Theme](https://github.com/ShahzamanRai/HabitsLog/blob/master/screenshots/HomeScreenLight.png)
+![Home Screen - Dark Theme](https://github.com/ShahzamanRai/HabitsLog/blob/master/screenshots/HomeScreenDark.png)
 
 ## Let's Connect and Collaborate
 Join hands to shape HabitLog's future! Connect with me:
