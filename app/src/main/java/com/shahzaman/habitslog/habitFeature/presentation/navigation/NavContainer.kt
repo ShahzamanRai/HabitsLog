@@ -2,7 +2,6 @@ package com.shahzaman.habitslog.habitFeature.presentation.navigation
 
 import android.content.Context
 import androidx.activity.addCallback
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -80,54 +79,52 @@ fun NavContainer(
             else -> Modifier
         },
         topBar = {
-            Crossfade(selectedRoute, label = "") { navRoute ->
-                when (navRoute) {
-                    NavRoutes.Setting -> MediumTopAppBar(
-                        title = {
-                            Text(stringResource(selectedRoute.stringRes))
-                        },
-                        navigationIcon = {
+            when (selectedRoute) {
+                NavRoutes.Setting -> MediumTopAppBar(
+                    title = {
+                        Text(stringResource(selectedRoute.stringRes))
+                    },
+                    navigationIcon = {
+                        ClickableIcon(imageVector = Icons.Default.ArrowBack) {
+                            navController.popBackStack()
+                        }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+
+                else -> TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(id = selectedRoute.stringRes),
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontFamily = Patua_One
+                            )
+                        )
+                    },
+                    actions = {
+                        if (selectedRoute == NavRoutes.Home) {
+                            IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = "Add habit",
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate(NavRoutes.Setting.route) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = "Settings",
+                                )
+                            }
+                        }
+                    },
+                    navigationIcon = {
+                        if (selectedRoute == NavRoutes.Stat) {
                             ClickableIcon(imageVector = Icons.Default.ArrowBack) {
                                 navController.popBackStack()
                             }
-                        },
-                        scrollBehavior = scrollBehavior
-                    )
-
-                    else -> TopAppBar(
-                        title = {
-                            Text(
-                                text = stringResource(id = selectedRoute.stringRes),
-                                style = MaterialTheme.typography.titleLarge.copy(
-                                    fontFamily = Patua_One
-                                )
-                            )
-                        },
-                        actions = {
-                            if (navRoute == NavRoutes.Home) {
-                                IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Add,
-                                        contentDescription = "Add habit",
-                                    )
-                                }
-                                IconButton(onClick = { navController.navigate(NavRoutes.Setting.route) }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Settings,
-                                        contentDescription = "Settings",
-                                    )
-                                }
-                            }
-                        },
-                        navigationIcon = {
-                            if (navRoute == NavRoutes.Stat) {
-                                ClickableIcon(imageVector = Icons.Default.ArrowBack) {
-                                    navController.popBackStack()
-                                }
-                            }
                         }
-                    )
-                }
+                    }
+                )
             }
         }
     ) { paddingValues ->

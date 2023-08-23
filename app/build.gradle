@@ -7,13 +7,12 @@ plugins {
 
 android {
     namespace 'com.shahzaman.habitslog'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.shahzaman.habitslog"
-        minSdk 24
-        //noinspection EditedTargetSdkVersion
-        targetSdk 33
+        minSdk 26
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -68,7 +67,7 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
-    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation("androidx.navigation:navigation-compose:2.7.0")
 
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")

@@ -1,6 +1,7 @@
 package com.shahzaman.habitslog.habitFeature.presentation.screens
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,6 +10,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -31,6 +35,9 @@ fun HomeScreen(
         modifier = Modifier
     ) {
 
+        var visible by remember {
+            mutableStateOf(true)
+        }
         val totalHabits by viewModel.totalHabitsFlow.collectAsState(initial = 0)
         val checkedHabits by viewModel.checkedHabitsFlow.collectAsState(initial = 0)
 
@@ -46,19 +53,21 @@ fun HomeScreen(
         LazyColumn(
         ) {
             items(state.habits) { habit ->
-                HabitCard(
-                    habitName = habit.title,
-                    habitFrequency = habit.frequency,
-                    habitEntity = HabitMapper.toEntity(habit),
-                    onCheck = {
-                        onEvent(HabitEvent.CheckHabit(habit.id))
-                    },
-                    onUnCheck = {
-                        onEvent(HabitEvent.UnCheckHabit(habit.id))
-                    },
-                    context = context,
-                    navController = navController
-                )
+                AnimatedVisibility(visible = visible) {
+                    HabitCard(
+                        habitName = habit.title,
+                        habitFrequency = habit.frequency,
+                        habitEntity = HabitMapper.toEntity(habit),
+                        onCheck = {
+                            onEvent(HabitEvent.CheckHabit(habit.id))
+                        },
+                        onUnCheck = {
+                            onEvent(HabitEvent.UnCheckHabit(habit.id))
+                        },
+                        context = context,
+                        navController = navController
+                    )
+                }
             }
         }
     }

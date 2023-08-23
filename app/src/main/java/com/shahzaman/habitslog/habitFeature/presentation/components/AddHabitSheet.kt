@@ -1,5 +1,6 @@
 package com.shahzaman.habitslog.habitFeature.presentation.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +22,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
@@ -34,11 +39,23 @@ fun AddHabitSheet(
     state: HabitState,
     onEvent: (HabitEvent) -> Unit,
 ) {
+    val alphaAnimation = remember {
+        Animatable(0f)
+    }
+    LaunchedEffect(Unit) {
+        alphaAnimation.animateTo(1f)
+    }
+
     AlertDialog(
         onDismissRequest = { onEvent(HabitEvent.HideDialog) },
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
-        )
+        ),
+        modifier = Modifier
+            .graphicsLayer {
+                alpha = alphaAnimation.value
+                compositingStrategy = CompositingStrategy.Auto
+            }
     ) {
         Surface(
             modifier = Modifier

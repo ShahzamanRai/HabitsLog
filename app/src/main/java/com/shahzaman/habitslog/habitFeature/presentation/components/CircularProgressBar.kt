@@ -1,7 +1,5 @@
 package com.shahzaman.habitslog.habitFeature.presentation.components
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -12,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,10 +33,9 @@ fun CircularProgressbar(
     extraSizeForegroundIndicator: Dp = 6.dp
 ) {
 
-    Log.d(TAG, "CircularProgressbar: $progress")
     // It remembers the number value
     var numberR by remember {
-        mutableStateOf(-1f)
+        mutableFloatStateOf(progress)
     }
 
     // Number Animation
@@ -51,7 +48,7 @@ fun CircularProgressbar(
     )
 
     // This is to start the animation when the activity is opened
-    LaunchedEffect(Unit) {
+    LaunchedEffect(progress) {
         numberR = progress
     }
 

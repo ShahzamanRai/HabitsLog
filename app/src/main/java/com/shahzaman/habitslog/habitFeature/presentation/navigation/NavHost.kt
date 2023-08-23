@@ -1,6 +1,10 @@
 package com.shahzaman.habitslog.habitFeature.presentation.navigation
 
 import android.content.Context
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,8 +26,23 @@ fun SetupNavHost(
     settingsViewModel: SettingsViewModel,
     habitsViewModel: HabitViewModel
 ) {
-    NavHost(navController = navHostController, startDestination = NavRoutes.Home.route) {
-        composable(route = NavRoutes.Home.route)
+    NavHost(
+        navController = navHostController,
+        startDestination = NavRoutes.Home.route
+    ) {
+        composable(
+            route = NavRoutes.Home.route,
+            enterTransition = {
+                slideInVertically(
+                    animationSpec = tween(300, easing = LinearEasing)
+                )
+            },
+            exitTransition = {
+                slideOutVertically(
+                    animationSpec = tween(300, easing = LinearEasing),
+                )
+            }
+        )
         {
             HomeScreen(
                 state = state,
@@ -35,13 +54,36 @@ fun SetupNavHost(
         }
         composable(
             route = NavRoutes.Stat.route,
-
-            ) {
+            enterTransition = {
+                slideInVertically(
+                    animationSpec = tween(300, easing = LinearEasing)
+                )
+            },
+            exitTransition = {
+                slideOutVertically(
+                    animationSpec = tween(300, easing = LinearEasing)
+                )
+            }
+        ) {
             StatScreen()
         }
 
         composable(
-            route = NavRoutes.Setting.route
+            route = NavRoutes.Setting.route,
+            enterTransition = {
+                slideInVertically(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            exitTransition = {
+                slideOutVertically(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            }
         ) {
             SettingScreen(
                 settingsModel = settingsViewModel
