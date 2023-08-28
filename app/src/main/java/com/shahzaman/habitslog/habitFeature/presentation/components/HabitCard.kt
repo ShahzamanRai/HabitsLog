@@ -37,7 +37,7 @@ fun HabitCard(
     context: Context,
     navController: NavController
 ) {
-    var checkedState by remember { mutableStateOf(habitEntity.isChecked.state) }
+    var checkedState by remember { mutableStateOf(habitEntity.isChecked) }
     Card(
         modifier = Modifier
             .fillMaxWidth()

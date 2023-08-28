@@ -1,6 +1,5 @@
 package com.shahzaman.habitslog.habitFeature.presentation.components
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
@@ -22,41 +23,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AddHabitSheet(
     state: HabitState,
     onEvent: (HabitEvent) -> Unit,
 ) {
-    val alphaAnimation = remember {
-        Animatable(0f)
-    }
-    LaunchedEffect(Unit) {
-        alphaAnimation.animateTo(1f)
-    }
-
     AlertDialog(
         onDismissRequest = { onEvent(HabitEvent.HideDialog) },
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
-        ),
-        modifier = Modifier
-            .graphicsLayer {
-                alpha = alphaAnimation.value
-                compositingStrategy = CompositingStrategy.Auto
-            }
+        )
     ) {
+        val focusManager = LocalFocusManager.current
+
         Surface(
             modifier = Modifier
                 .wrapContentWidth()
@@ -103,7 +96,19 @@ fun AddHabitSheet(
                     },
                     label = {
                         Text(text = "Title")
-                    })
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Sentences,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    )
+                )
                 Spacer(modifier = Modifier.height(12.dp))
                 OutlinedTextField(
                     value = state.frequency,
@@ -113,6 +118,7 @@ fun AddHabitSheet(
                     label = {
                         Text(text = "Frequency")
                     },
+                    singleLine = true,
                     placeholder = {
                         Text(
                             text = "e.g. Daily",
@@ -120,7 +126,17 @@ fun AddHabitSheet(
                                 alpha = 0.9f
                             )
                         )
-                    })
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Sentences,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    ))
                 Spacer(modifier = Modifier.height(12.dp))
                 OutlinedTextField(
                     value = state.time,
@@ -137,7 +153,18 @@ fun AddHabitSheet(
                                 alpha = 0.9f
                             )
                         )
-                    })
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        capitalization = KeyboardCapitalization.Sentences,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            focusManager.clearFocus(true)
+                        }
+                    ))
             }
         }
     }

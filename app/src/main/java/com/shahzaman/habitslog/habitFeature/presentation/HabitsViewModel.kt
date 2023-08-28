@@ -3,7 +3,6 @@ package com.shahzaman.habitslog.habitFeature.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shahzaman.habitslog.habitFeature.data.database.CheckedItem
 import com.shahzaman.habitslog.habitFeature.data.database.HabitDao
 import com.shahzaman.habitslog.habitFeature.domain.habit.SortType
 import com.shahzaman.habitslog.habitFeature.domain.mapper.Habit
@@ -51,32 +50,24 @@ class HabitViewModel @Inject constructor(
             is HabitEvent.CheckHabit -> {
                 val currentDate = LocalDate.now()
 
-                val checkedItem = CheckedItem(
-                    state = true,
-                    date = listOf(currentDate)
-                )
-
-
                 viewModelScope.launch(Dispatchers.IO) {
                     val habit = dao.getHabitById(event.id)
-                    val updatedHabit = habit.copy(isChecked = checkedItem)
+                    val checkedDates = habit.checkedDates + currentDate
+                    val updatedHabit =
+                        habit.copy(isChecked = true, checkedDates = checkedDates)
                     dao.upsertHabit(updatedHabit)
                 }
 
             }
 
             is HabitEvent.UnCheckHabit -> {
-                val currentDate = LocalDate.now()
-
-                val checkedItem = CheckedItem(
-                    state = false,
-                    date = listOf(currentDate)
-                )
-
+                LocalDate.now()
 
                 viewModelScope.launch(Dispatchers.IO) {
                     val habit = dao.getHabitById(event.id)
-                    val updatedHabit = habit.copy(isChecked = checkedItem)
+                    val updatedCheckedDates = habit.checkedDates.filterNot { it == LocalDate.now() }
+                    val updatedHabit =
+                        habit.copy(isChecked = false, checkedDates = updatedCheckedDates)
                     dao.upsertHabit(updatedHabit)
                 }
 
@@ -100,10 +91,10 @@ class HabitViewModel @Inject constructor(
                 val title = state.value.title
                 val frequency = state.value.frequency
                 val isChecked = state.value.isChecked
-                val date = state.value.date
+                val checkedDates = state.value.checkedHabits
                 val time = state.value.time
 
-                if (title.isBlank() || time.isBlank()) {
+                if (title.isBlank() || time.isBlank() || frequency.isBlank()) {
                     return
                 }
 
@@ -111,8 +102,8 @@ class HabitViewModel @Inject constructor(
                     title = title,
                     frequency = frequency,
                     isChecked = isChecked,
-                    date = date,
-                    time = time
+                    time = time,
+                    checkedDates = checkedDates
                 )
                 viewModelScope.launch {
                     dao.upsertHabit(HabitMapper.toEntity(habit))
@@ -165,10 +156,11 @@ class HabitViewModel @Inject constructor(
 
         }
     }
+
     private fun getCheckedHabitsCount(): Flow<Int> {
         return dao.getHabitsByTitle() // Use the appropriate query here
             .map { habits ->
-                habits.count { it.isChecked.state }
+                habits.count { it.isChecked }
             }
     }
 }

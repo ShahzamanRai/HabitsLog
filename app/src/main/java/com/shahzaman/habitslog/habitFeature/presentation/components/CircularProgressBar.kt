@@ -30,7 +30,7 @@ fun CircularProgressbar(
     animationDelay: Int = 0,
     foregroundIndicatorColor: Color = MaterialTheme.colorScheme.primary,
     backgroundIndicatorColor: Color = foregroundIndicatorColor.copy(alpha = 0.5f),
-    extraSizeForegroundIndicator: Dp = 6.dp
+    extraSizeForegroundIndicator: Dp = 4.dp
 ) {
 
     // It remembers the number value
@@ -56,6 +56,7 @@ fun CircularProgressbar(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(size = size)
+
     ) {
         Canvas(
             modifier = Modifier
@@ -79,7 +80,7 @@ fun CircularProgressbar(
                 useCenter = false,
                 style = Stroke(
                     (thickness + extraSizeForegroundIndicator).toPx(),
-                    cap = StrokeCap.Butt
+                    cap = StrokeCap.Round
                 )
             )
         }

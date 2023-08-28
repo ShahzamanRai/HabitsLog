@@ -4,6 +4,7 @@ import com.shahzaman.habitslog.habitFeature.data.database.HabitDao
 import com.shahzaman.habitslog.habitFeature.data.database.HabitEntity
 import com.shahzaman.habitslog.habitFeature.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import javax.inject.Inject
 
 class HabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : HabitRepository {
@@ -29,11 +30,15 @@ class HabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : 
         return habitDao.getHabitById(id = id)
     }
 
+    override suspend fun getAllHabits(): Flow<List<HabitEntity>> {
+        return habitDao.getAllHabits()
+    }
+
     override suspend fun getTotalHabits(): Flow<Int> {
         return habitDao.getTotalHabits()
     }
 
-    override suspend fun checkedHabits(): Flow<Int> {
-        return checkedHabits()
+    override suspend fun updateCheckedDates(id: Int, dates: List<LocalDate>) {
+        return habitDao.updateCheckedDates(id, dates)
     }
 }

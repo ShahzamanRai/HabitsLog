@@ -10,7 +10,7 @@ object HabitMapper {
             frequency = entity.frequency,
             isChecked = entity.isChecked,
             time = entity.time,
-            date = entity.date
+            checkedDates = entity.checkedDates
         )
     }
 
@@ -21,7 +21,7 @@ object HabitMapper {
             frequency = habit.frequency,
             isChecked = habit.isChecked,
             time = habit.time,
-            date = habit.date
+            checkedDates = habit.checkedDates
         )
     }
 }

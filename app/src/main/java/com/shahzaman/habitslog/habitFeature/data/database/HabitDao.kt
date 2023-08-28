@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface HabitDao {
@@ -17,6 +18,9 @@ interface HabitDao {
     @Query("SELECT * FROM habits WHERE id = :id")
     fun getHabitById(id: Int): HabitEntity
 
+    @Query("SELECT * FROM habits")
+    fun getAllHabits(): Flow<List<HabitEntity>>
+
     @Upsert
     suspend fun upsertHabit(habit: HabitEntity)
 
@@ -25,5 +29,8 @@ interface HabitDao {
 
     @Query("SELECT COUNT(*) FROM habits")
     fun getTotalHabits(): Flow<Int>
+
+    @Query("UPDATE habits SET checked_dates = :dates WHERE id = :id")
+    suspend fun updateCheckedDates(id: Int, dates: List<LocalDate>)
     
 }
