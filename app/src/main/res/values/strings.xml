@@ -7,6 +7,9 @@
     <string name="setting">Setting</string>
     <string name="addHabit">Add habit</string>
 
+    //Components
+    <string name="almost_there">You are almost there!"</string>
+    <string name="progress">day goals completed"</string>
 
     //Settings
     <string name="appearance">Appearance</string>

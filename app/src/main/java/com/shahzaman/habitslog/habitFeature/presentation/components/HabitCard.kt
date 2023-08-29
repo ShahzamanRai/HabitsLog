@@ -103,10 +103,8 @@ fun playSound(
     context: Context
 ) {
     val mediaPlayer = MediaPlayer.create(context, R.raw.done)
-    mediaPlayer.setOnPreparedListener {
-        mediaPlayer.start()
-    }
     mediaPlayer.setOnCompletionListener {
         mediaPlayer.release()
     }
+    mediaPlayer.start()
 }

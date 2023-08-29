@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.shahzaman.habitslog.R
 import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
 @Composable
@@ -24,11 +26,10 @@ fun ProgressCard(
     checkedHabits: Int,
 ) {
     val progress: Float = remember(checkedHabits, totalHabits) {
-        val calculatedProgress = (checkedHabits.toFloat() / totalHabits.toFloat()) * 100f
-        if (calculatedProgress.isNaN()) {
-            0f
+        if (totalHabits == 0) {
+            0f // No progress if there are no goals yet
         } else {
-            calculatedProgress
+            (checkedHabits.toFloat() / totalHabits.toFloat()) * 100f
         }
     }
 
@@ -49,14 +50,14 @@ fun ProgressCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "You are almost there!",
+                    text = stringResource(id = R.string.almost_there),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontFamily = Patua_One
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "${checkedHabits}/${totalHabits} day goals completed",
+                    text = "${checkedHabits}/${totalHabits} " + stringResource(id = R.string.progress),
                     style = MaterialTheme.typography.labelLarge
                 )
             }

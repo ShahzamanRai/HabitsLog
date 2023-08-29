@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.shahzaman.habitslog.R
 import com.shahzaman.habitslog.habitFeature.presentation.Preferences
-import com.shahzaman.habitslog.habitFeature.presentation.SettingsViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.SettingsViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.components.ButtonGroupPref
 import com.shahzaman.habitslog.habitFeature.presentation.components.SettingsCategory
 

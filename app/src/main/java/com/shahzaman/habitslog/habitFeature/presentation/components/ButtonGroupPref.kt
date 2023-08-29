@@ -34,25 +34,42 @@ fun ButtonGroupPref(
     onChange: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .padding(top = 8.dp)
+        modifier = Modifier.padding(top = 8.dp)
     ) {
+        // Title
         Text(title)
         Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
+
+        // Button Group
+        Row(modifier = Modifier.fillMaxWidth()) {
             val cornerRadius = 20.dp
             var selectedItem by remember {
-                mutableStateOf(
-                    Preferences.instance.getString(preferenceKey, defaultValue)
-                )
+                mutableStateOf(Preferences.instance.getString(preferenceKey, defaultValue))
             }
 
             values.forEachIndexed { index, value ->
                 val startRadius = if (index != 0) 0.dp else cornerRadius
                 val endRadius = if (index == values.size - 1) cornerRadius else 0.dp
+
+                // Determine border color
+                val borderColor = if (selectedItem == value) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.75f)
+                }
+
+                // Determine button colors
+                val buttonColors = if (selectedItem == value) {
+                    ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+                } else {
+                    ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                }
 
                 OutlinedButton(
                     onClick = {
@@ -61,7 +78,7 @@ fun ButtonGroupPref(
                         onChange.invoke(values[index])
                     },
                     modifier = Modifier
-                        .offset(if (index == 0) 0.dp else (-1 * index).dp, 0.dp)
+                        .offset(if (index == 0) 0.dp else (-index).dp, 0.dp)
                         .zIndex(if (selectedItem == value) 1f else 0f),
                     shape = RoundedCornerShape(
                         topStart = startRadius,
@@ -69,25 +86,8 @@ fun ButtonGroupPref(
                         bottomStart = startRadius,
                         bottomEnd = endRadius
                     ),
-                    border = BorderStroke(
-                        1.dp,
-                        if (selectedItem == value) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.75f)
-                        }
-                    ),
-                    colors = if (selectedItem == value) {
-                        ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    } else {
-                        ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                    border = BorderStroke(1.dp, borderColor),
+                    colors = buttonColors
                 ) {
                     Text(options[index])
                 }

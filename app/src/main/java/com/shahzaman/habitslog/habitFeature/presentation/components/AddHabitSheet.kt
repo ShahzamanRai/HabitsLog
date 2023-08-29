@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -63,109 +62,77 @@ fun AddHabitSheet(
                     .background(MaterialTheme.colorScheme.surface),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                TopAppBar(title = {
-                    Text(text = "Add Habit")
-                },
+                TopAppBar(
+                    title = {
+                        Text(text = "Add Habit")
+                    },
                     navigationIcon = {
-                        IconButton(onClick = { onEvent(HabitEvent.HideDialog) }) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Close Sheet"
-                            )
-                        }
+                        CloseButton(onClick = { onEvent(HabitEvent.HideDialog) })
                     },
                     actions = {
-                        TextButton(onClick = { onEvent(HabitEvent.SaveHabit) }) {
-                            Text(text = "Save")
-                        }
+                        SaveButton(onClick = { onEvent(HabitEvent.SaveHabit) })
                     }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
+                HabitTextField(
                     value = state.title,
-                    onValueChange = {
-                        onEvent(HabitEvent.SetTitle(it))
-                    },
-                    placeholder = {
-                        Text(
-                            text = "e.g. Exercise",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                alpha = 0.9f
-                            )
-                        )
-                    },
-                    label = {
-                        Text(text = "Title")
-                    },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Sentences,
-                        keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Next)
-                        }
-                    )
+                    onValueChange = { onEvent(HabitEvent.SetTitle(it)) },
+                    label = "Title",
+                    imeAction = ImeAction.Next,
+                    keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
+                HabitTextField(
                     value = state.frequency,
-                    onValueChange = {
-                        onEvent(HabitEvent.SetFrequency(it))
-                    },
-                    label = {
-                        Text(text = "Frequency")
-                    },
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "e.g. Daily",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                alpha = 0.9f
-                            )
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Sentences,
-                        keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Next)
-                        }
-                    ))
+                    onValueChange = { onEvent(HabitEvent.SetFrequency(it)) },
+                    label = "Frequency",
+                    imeAction = ImeAction.Next,
+                    keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+                )
                 Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
+                HabitTextField(
                     value = state.time,
-                    onValueChange = {
-                        onEvent(HabitEvent.SetTime(it))
-                    },
-                    label = {
-                        Text(text = "Time")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "e.g. Morning",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                alpha = 0.9f
-                            )
-                        )
-                    },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                        capitalization = KeyboardCapitalization.Sentences,
-                        keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            focusManager.clearFocus(true)
-                        }
-                    ))
+                    onValueChange = { onEvent(HabitEvent.SetTime(it)) },
+                    label = "Time",
+                    imeAction = ImeAction.Done,
+                    keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Exit) }
+                )
             }
         }
     }
+}
+
+@Composable
+private fun CloseButton(onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(imageVector = Icons.Default.Close, contentDescription = "Close Sheet")
+    }
+}
+
+@Composable
+private fun SaveButton(onClick: () -> Unit) {
+    TextButton(onClick = onClick) {
+        Text(text = "Save")
+    }
+}
+
+@Composable
+private fun HabitTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    imeAction: ImeAction,
+    keyboardActions: KeyboardActions
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = imeAction,
+            keyboardType = KeyboardType.Text
+        ),
+        keyboardActions = keyboardActions
+    )
 }

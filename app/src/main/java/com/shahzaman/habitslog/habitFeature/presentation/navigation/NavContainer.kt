@@ -14,13 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.shahzaman.habitslog.R
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
-import com.shahzaman.habitslog.habitFeature.presentation.HabitViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.HabitViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.MainActivity
-import com.shahzaman.habitslog.habitFeature.presentation.SettingsViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.SettingsViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.components.ClickableIcon
 import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.Patua_One
 
@@ -30,10 +32,10 @@ fun NavContainer(
     settingsViewModel: SettingsViewModel,
     initialTab: NavRoutes,
     state: HabitState,
-    viewModel: HabitViewModel,
     baseContext: Context,
     onEvent: (HabitEvent) -> Unit,
 ) {
+    val viewModel: HabitViewModel = hiltViewModel()
     val context = LocalContext.current
 
     val navController = rememberNavController()
@@ -80,50 +82,11 @@ fun NavContainer(
         },
         topBar = {
             when (selectedRoute) {
-                NavRoutes.Setting -> MediumTopAppBar(
-                    title = {
-                        Text(stringResource(selectedRoute.stringRes))
-                    },
-                    navigationIcon = {
-                        ClickableIcon(imageVector = Icons.Default.ArrowBack) {
-                            navController.popBackStack()
-                        }
-                    },
-                    scrollBehavior = scrollBehavior
-                )
-
-                else -> TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(id = selectedRoute.stringRes),
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontFamily = Patua_One
-                            )
-                        )
-                    },
-                    actions = {
-                        if (selectedRoute == NavRoutes.Home) {
-                            IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "Add habit",
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate(NavRoutes.Setting.route) }) {
-                                Icon(
-                                    imageVector = Icons.Default.Settings,
-                                    contentDescription = "Settings",
-                                )
-                            }
-                        }
-                    },
-                    navigationIcon = {
-                        if (selectedRoute == NavRoutes.Stat) {
-                            ClickableIcon(imageVector = Icons.Default.ArrowBack) {
-                                navController.popBackStack()
-                            }
-                        }
-                    }
+                NavRoutes.Setting -> SetupSettingTopBar(navController = navController)
+                else -> SetupHomeStatTopBar(
+                    selectedRoute = selectedRoute,
+                    navController = navController,
+                    onEvent = onEvent
                 )
             }
         }
@@ -138,8 +101,69 @@ fun NavContainer(
                 onEvent = viewModel::onEvent,
                 context = baseContext,
                 settingsViewModel = settingsViewModel,
-                habitsViewModel = viewModel
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SetupSettingTopBar(navController: NavController) {
+    // Logic to set up the top bar for the Setting route
+    MediumTopAppBar(
+        title = {
+            Text(stringResource(R.string.setting))
+        },
+        navigationIcon = {
+            ClickableIcon(imageVector = Icons.Default.ArrowBack) {
+                navController.popBackStack()
+            }
+        },
+        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+            rememberTopAppBarState()
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SetupHomeStatTopBar(
+    selectedRoute: NavRoutes,
+    navController: NavController,
+    onEvent: (HabitEvent) -> Unit
+) {
+    // Logic to set up the top bar for the Home and Stat routes
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(id = selectedRoute.stringRes),
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontFamily = Patua_One
+                )
+            )
+        },
+        actions = {
+            if (selectedRoute == NavRoutes.Home) {
+                IconButton(onClick = { onEvent(HabitEvent.ShowDialog) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Add habit",
+                    )
+                }
+                IconButton(onClick = { navController.navigate(NavRoutes.Setting.route) }) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            if (selectedRoute == NavRoutes.Stat) {
+                ClickableIcon(imageVector = Icons.Default.ArrowBack) {
+                    navController.popBackStack()
+                }
+            }
+        }
+    )
 }

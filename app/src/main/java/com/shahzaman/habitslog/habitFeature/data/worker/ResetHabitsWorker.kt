@@ -20,17 +20,18 @@ class ResetHabitsWorker @AssistedInject constructor(
             performResetHabits()
             Result.success()
         } catch (e: Exception) {
+            e.printStackTrace()
             Result.failure()
         }
     }
 
     private suspend fun performResetHabits() {
         withContext(Dispatchers.IO) {
-            val habits = repository.getAllHabits() // Modify this to get all habits
+            val habits = repository.getAllHabits() // get all habits
             habits.map { habits ->
                 habits.forEach { habit ->
-                    habit.copy(isChecked = false)
-                    repository.upsertHabit(habit)
+                    val updatedHabit = habit.copy(isChecked = false)
+                    repository.upsertHabit(updatedHabit)
                 }
             }
         }

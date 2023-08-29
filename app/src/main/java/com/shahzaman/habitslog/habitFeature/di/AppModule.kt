@@ -30,4 +30,5 @@ object AppModule {
     fun provideHabitDao(habitDatabase: HabitDatabase): HabitDao {
         return habitDatabase.dao
     }
+
 }

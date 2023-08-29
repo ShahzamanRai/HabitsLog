@@ -11,8 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
-import com.shahzaman.habitslog.habitFeature.presentation.HabitViewModel
-import com.shahzaman.habitslog.habitFeature.presentation.SettingsViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.SettingsViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.screens.HomeScreen
 import com.shahzaman.habitslog.habitFeature.presentation.screens.SettingScreen
 import com.shahzaman.habitslog.habitFeature.presentation.screens.StatScreen
@@ -24,7 +23,6 @@ fun SetupNavHost(
     onEvent: (HabitEvent) -> Unit,
     context: Context,
     settingsViewModel: SettingsViewModel,
-    habitsViewModel: HabitViewModel
 ) {
     NavHost(
         navController = navHostController,
@@ -49,7 +47,6 @@ fun SetupNavHost(
                 onEvent = onEvent,
                 context = context,
                 navController = navHostController,
-                viewModel = habitsViewModel
             )
         }
         composable(

@@ -1,6 +1,5 @@
 package com.shahzaman.habitslog.habitFeature.presentation
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -19,24 +18,22 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.shahzaman.habitslog.habitFeature.data.database.HabitDatabase
 import com.shahzaman.habitslog.habitFeature.data.worker.ResetHabitsWorker
 import com.shahzaman.habitslog.habitFeature.presentation.components.AddHabitSheet
 import com.shahzaman.habitslog.habitFeature.presentation.navigation.NavContainer
 import com.shahzaman.habitslog.habitFeature.presentation.navigation.NavRoutes
 import com.shahzaman.habitslog.habitFeature.presentation.ui.theme.HabitsLogTheme
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.HabitViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var db: HabitDatabase
-
     private val viewModel: HabitViewModel by viewModels()
+    private val TAG = MainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +56,6 @@ class MainActivity : ComponentActivity() {
                         settingsModel,
                         NavRoutes.Home,
                         state = state,
-                        viewModel = viewModel,
                         baseContext = baseContext,
                         onEvent = viewModel::onEvent
                     )

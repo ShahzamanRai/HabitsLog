@@ -13,7 +13,7 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindWeatherRepository(
+    abstract fun bindHabitRepository(
         habitsRepositoryImpl: HabitRepositoryImpl
     ): HabitRepository
 }

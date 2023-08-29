@@ -8,11 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,63 +27,75 @@ fun CircularProgressbar(
     backgroundIndicatorColor: Color = foregroundIndicatorColor.copy(alpha = 0.5f),
     extraSizeForegroundIndicator: Dp = 4.dp
 ) {
-
-    // It remembers the number value
-    var numberR by remember {
-        mutableFloatStateOf(progress)
-    }
-
-    // Number Animation
-    val animateNumber = animateFloatAsState(
-        targetValue = numberR,
+    // Animation
+    val animatedProgress = animateFloatAsState(
+        targetValue = progress,
         animationSpec = tween(
             durationMillis = animationDuration,
             delayMillis = animationDelay
         ), label = ""
     )
 
-    // This is to start the animation when the activity is opened
-    LaunchedEffect(progress) {
-        numberR = progress
-    }
+    // Display the progress percentage
+    val progressText = "${animatedProgress.value.toInt()}%"
 
+    // Draw the CircularProgressbar
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(size = size)
-
     ) {
-        Canvas(
-            modifier = Modifier
-                .size(size = size)
-        ) {
+        // Draw circles
+        DrawCircularProgressbar(
+            size = size,
+            thickness = thickness,
+            animatedProgress = animatedProgress.value,
+            foregroundIndicatorColor = foregroundIndicatorColor,
+            backgroundIndicatorColor = backgroundIndicatorColor,
+            extraSizeForegroundIndicator = extraSizeForegroundIndicator
+        )
 
-            // Background circle
-            drawCircle(
-                color = backgroundIndicatorColor,
-                radius = size.toPx() / 2,
-                style = Stroke(width = thickness.toPx(), cap = StrokeCap.Round)
-            )
-
-            val sweepAngle = (animateNumber.value / 100) * 360
-
-            // Foreground circle
-            drawArc(
-                color = foregroundIndicatorColor,
-                startAngle = -90f,
-                sweepAngle = sweepAngle,
-                useCenter = false,
-                style = Stroke(
-                    (thickness + extraSizeForegroundIndicator).toPx(),
-                    cap = StrokeCap.Round
-                )
-            )
-        }
-
-        // Text that shows number inside the circle
+        // Display progress percentage
         Text(
-            text = (animateNumber.value).toInt().toString() + "%",
+            text = progressText,
             style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+private fun DrawCircularProgressbar(
+    size: Dp,
+    thickness: Dp,
+    animatedProgress: Float,
+    foregroundIndicatorColor: Color,
+    backgroundIndicatorColor: Color,
+    extraSizeForegroundIndicator: Dp
+) {
+    Canvas(
+        modifier = Modifier
+            .size(size = size)
+    ) {
+        // Draw the background circle
+        drawCircle(
+            color = backgroundIndicatorColor,
+            radius = size.toPx() / 2,
+            style = Stroke(width = thickness.toPx(), cap = StrokeCap.Round)
+        )
+
+        // Calculate sweep angle for progress
+        val sweepAngle = (animatedProgress / 100) * 360
+
+        // Draw the foreground circle
+        drawArc(
+            color = foregroundIndicatorColor,
+            startAngle = -90f,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            style = Stroke(
+                (thickness + extraSizeForegroundIndicator).toPx(),
+                cap = StrokeCap.Round
+            )
         )
     }
 }

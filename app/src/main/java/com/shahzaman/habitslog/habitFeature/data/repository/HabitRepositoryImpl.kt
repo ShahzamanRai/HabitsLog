@@ -22,7 +22,7 @@ class HabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : 
         return habitDao.getHabitsByTime()
     }
 
-    override suspend fun getHabitsByTitle(): Flow<List<HabitEntity>> {
+    override fun getHabitsByTitle(): Flow<List<HabitEntity>> {
         return habitDao.getHabitsByTitle()
     }
 
@@ -34,7 +34,7 @@ class HabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : 
         return habitDao.getAllHabits()
     }
 
-    override suspend fun getTotalHabits(): Flow<Int> {
+    override fun getTotalHabits(): Flow<Int> {
         return habitDao.getTotalHabits()
     }
 

@@ -12,14 +12,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.shahzaman.habitslog.habitFeature.domain.mapper.HabitMapper
 import com.shahzaman.habitslog.habitFeature.presentation.HabitEvent
 import com.shahzaman.habitslog.habitFeature.presentation.HabitState
-import com.shahzaman.habitslog.habitFeature.presentation.HabitViewModel
+import com.shahzaman.habitslog.habitFeature.presentation.viewModels.HabitViewModel
 import com.shahzaman.habitslog.habitFeature.presentation.components.HabitCard
 import com.shahzaman.habitslog.habitFeature.presentation.components.ProgressCard
 
@@ -28,14 +28,15 @@ fun HomeScreen(
     state: HabitState,
     onEvent: (HabitEvent) -> Unit,
     context: Context,
-    navController: NavController,
-    viewModel: HabitViewModel
+    navController: NavController
 ) {
+    val viewModel: HabitViewModel = hiltViewModel()
+
     Column(
         modifier = Modifier
     ) {
 
-        var visible by remember {
+        val visible by remember {
             mutableStateOf(true)
         }
         val totalHabits by viewModel.totalHabitsFlow.collectAsState(initial = 0)
